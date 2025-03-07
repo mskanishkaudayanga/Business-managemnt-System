@@ -5,7 +5,6 @@ export default function AppRouter() {
   return (
     <Routes>
       <Route path="/Home" element={<Homepage />} />
-
       {/* <Route path="/resturent" element={<ResturentPage />} />
         <Route path="/resturent/auth" element={<AuthRestaurantPage />} />
         <Route path="/signup" element={<SignUp/>} />
