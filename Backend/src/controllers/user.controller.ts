@@ -13,6 +13,7 @@ const AddUser = async (req: Request, res: Response): Promise<void> => {
       const user = await userServices.registerUser(data);
       res.status(201).json(user);
     }
+    
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });

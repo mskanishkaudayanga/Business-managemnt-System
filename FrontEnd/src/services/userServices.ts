@@ -1,4 +1,5 @@
-import { LoginData } from "../types/types";
+import axios from "axios";
+import { LoginData, RegisterData } from "../types/types";
 import axiosInstance from "./Auth";
 
 const authServices ={
@@ -13,11 +14,15 @@ const authServices ={
   },
   register: async (register:RegisterData) => {
     try{
-      const response =await axiosInstance.post("register",register);
+      console.log("registerserv ",register);
+      const response =await axios.post("http://localhost:5000/adduser",register);
+      console.log("response ",response);
       return response.data;
     }
     catch(error){
+      console.log("error ",error);
       throw error;
+
     }
   }
 }

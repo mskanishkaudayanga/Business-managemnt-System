@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import InputField from "./InputFeild";
 import SelectField from "./SelectFeild";
 import { toast } from "react-toastify";
+import authServices from "../services/userServices";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
-    restaurantName: "",
+    name: "",
     password: "",
     confirmPassword: "",
     role: "",
@@ -29,7 +30,7 @@ const RegisterForm = () => {
 
     const newErrors = {
       email: validateField("email", formData.email),
-      restaurantName: validateField("restaurantName", formData.restaurantName),
+      restaurantName: validateField("restaurantName", formData.name),
       password: validateField("password", formData.password),
       confirmPassword: validateField(
         "confirmPassword",
@@ -41,8 +42,26 @@ const RegisterForm = () => {
     if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
-    toast.success("Registration successful. Redirecting to login page...");
-    setTimeout(() => navigate("/login"), 1500);
+    try {
+      const registerData = {
+        email: formData.email,
+        name: formData.name,
+        password: formData.password,
+        role: formData.role,
+      };
+      console.log("rehister ", registerData);
+      const register = await authServices.register(registerData);
+      console.log("register ", register);
+      if (register.error) {
+        toast.error(register.error);
+        return;
+      }
+      toast.success("Registration successful. Redirecting to login page...");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
   //validation
   const validateField = (name: string, value: string) => {
@@ -52,11 +71,11 @@ const RegisterForm = () => {
       case "email":
         errorMessage = /\S+@\S+\.\S+/.test(value) ? "" : "Invalid email format";
         break;
-      case "restaurantName":
+      case "name":
         errorMessage =
           value.length >= 3
             ? ""
-            : "Restaurant name must be at least 3 characters";
+            : " name must be at least 3 characters";
         break;
       case "password":
         errorMessage =
@@ -97,9 +116,9 @@ const RegisterForm = () => {
         <InputField
           label="Name"
           type="text"
-          name="restaurantName"
-          value={formData.restaurantName}
-          placeholder="Enter your restaurant name"
+          name="name"
+          value={formData.name}
+          placeholder="Enter your name or business name"
           onChange={handleChange}
           validate={validateField}
         />

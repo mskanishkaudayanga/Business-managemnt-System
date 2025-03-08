@@ -4,7 +4,7 @@ export interface LoginData{
 }
 export interface RegisterData{
   email: string;
-  restaurantName: string;
+  name: string;
   password: string;
   role: string;
 }

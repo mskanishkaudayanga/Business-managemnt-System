@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { User} from "../@types/user";
+import { User } from "../@types/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -24,7 +24,7 @@ const registerUser = async (user: User) => {
 };
 
 const getUserByEmail = async (email: string): Promise<User | null> => {
-  try {
+  try {;
     return await prisma.user.findUnique({
       where: {
         email,
@@ -35,24 +35,22 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
   }
 };
 
-const genarateToken =async (id:number, role:string)=>{
+const genarateToken = async (id: number, role: string) => {
   try {
     console.log(secrate);
     console.log(exprie);
-    return jwt.sign({id,role},secrate as string,{
-      expiresIn: "1h"
-    })
+    return jwt.sign({ id, role }, secrate as string, {
+      expiresIn: "1h",
+    });
   } catch (error) {
     return error;
   }
-
-}
+};
 
 const userServices = {
   registerUser,
   getUserByEmail,
-  genarateToken
-  
+  genarateToken,
 };
 
 export default userServices;
