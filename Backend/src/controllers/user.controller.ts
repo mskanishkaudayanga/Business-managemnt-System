@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import userServices from "../services/users.services";
+import bcrypt from "bcrypt";
 
 const AddUser = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,7 +20,35 @@ const AddUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const LoginUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const data = req.body;
+    const userData = await userServices.getUserByEmail(data.email);
+    if (!userData) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    const isMatch = await bcrypt.compare(data.password, userData.password);
+    if (!isMatch) {
+      res.status(401).json({ message: "Invalid credentials" });
+      return;
+    }
+    if(!userData.id || !userData.role){
+      res.status(500).json({ message: "Internal server error" });
+      return;
+    }
+    const token = await userServices.genarateToken(userData.id, userData.role);
+    res.status(200).json({ token, role: userData.role });
+
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+}
 const userController = {
   AddUser,
+  LoginUser
 };
 export default userController;
