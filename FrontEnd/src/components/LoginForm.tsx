@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./InputFeild";
 import { toast } from "react-toastify";
+import authServices from "../services/userServices";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -44,9 +45,16 @@ const LoginForm = () => {
     if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
-
+    try{
+    const login = await authServices.login(formData);
+    console.log("login ", login);
     toast.success("Login successful! Redirecting...");
-    setTimeout(() => navigate("/dashboard"), 1500);
+    sessionStorage.setItem("token", login.token);
+    setTimeout(() => navigate("/"));
+    }
+    catch(error){
+      toast.error(error as string);
+    }
   };
 
   return (

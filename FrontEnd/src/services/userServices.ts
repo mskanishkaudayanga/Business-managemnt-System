@@ -5,6 +5,7 @@ import axiosInstance from "./Auth";
 const authServices ={
   login: async (login:LoginData) => {
     try{
+      console.log("login ",login);
       const response =await axiosInstance.post("login",login);
       return response.data;
     }

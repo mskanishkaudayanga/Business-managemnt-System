@@ -37,8 +37,6 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
 
 const genarateToken = async (id: number, role: string) => {
   try {
-    console.log(secrate);
-    console.log(exprie);
     return jwt.sign({ id, role }, secrate as string, {
       expiresIn: "1h",
     });
