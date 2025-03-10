@@ -96,9 +96,6 @@ const RegisterForm = () => {
   };
   return (
     <div className="w-full max-w-md p-8">
-      {/* Alert Message */}
-      {/* <AlertMessage message={alertMessage} /> */}
-
       <h2 className="text-3xl font-bold text-center text-green-500 mb-6">
         Sign Up
       </h2>

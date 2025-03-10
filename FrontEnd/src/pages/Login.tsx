@@ -12,7 +12,7 @@ const Login = () => {
       >
         {/* Left side: Login Form */}
         <div className="lg:w-1/2 flex items-center justify-center bg-white bg-opacity-80 p-8 rounded-lg">
-          <div className="w-full max-w-md p-8">
+          <div className="w-full max-w-md p-8 border border-gray-300 rounded-lg">
             <LoginForm />
           </div>
         </div>
