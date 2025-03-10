@@ -36,9 +36,9 @@ const EditProfile = () => {
     "Other",
   ];
   const timeZones = [
-    { label: "Full Time (8 AM - 5 PM)", value: "8-5" },
-    { label: "Part Time (2 PM - 10 PM)", value: "2-10" },
-    { label: "24 Hours", value: "24h" },
+    "Full Time (8 AM - 5 PM)",
+    "Part Time (2 PM - 10 PM)",
+    "24 Hours"
   ];
   const [formData, setFormData] = useState({
     name: "",
@@ -209,7 +209,7 @@ const EditProfile = () => {
           name="timeZone"
           value={formData.timeZone}
           onChange={handleChange}
-          options={categories.map((timeZone) => ({
+          options={timeZones.map((timeZone) => ({
             value: timeZone,
             label: timeZone,
           }))}
