@@ -1,5 +1,6 @@
-import { Business, Category, PrismaClient, TimesEnum } from "@prisma/client";
+import { Business, Category, Prisma, PrismaClient, TimesEnum } from "@prisma/client";
 const prisma = new PrismaClient();
+
 
 const updateBusiness = async (id:number, business: Business): Promise<Business> => {
   try {
@@ -79,6 +80,31 @@ const getBusinesIDByUserId = async (userId: number): Promise<number> => {
   }
 }
 
+const getFilteredBusiness = async (location?: string, category?: Category, timeZone?: TimesEnum): Promise<Business[]> => {
+  try {
+    // Build the filter object dynamically
+    const where: Prisma.BusinessWhereInput = {};
+
+    if (location) {
+      where.location = location;
+    }
+    if (category) {
+      where.category = category;
+    }
+    if (timeZone) {
+      where.timeZone = timeZone;
+    }
+
+    // Fetch the businesses based on the dynamic filter
+    return await prisma.business.findMany({
+      where: where,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 const businessServices = {
   updateBusiness,
   Addbusiness,
@@ -86,6 +112,7 @@ const businessServices = {
   getbusinessByCategory,
   getbusinessByTimeZone,
   getAllBusiness,
-  getBusinesIDByUserId
+  getBusinesIDByUserId,
+  getFilteredBusiness
 }
 export default businessServices;

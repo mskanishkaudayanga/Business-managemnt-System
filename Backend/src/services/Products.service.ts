@@ -1,15 +1,25 @@
 import { PrismaClient, ServiceAndProduct } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const addproduct = async (product: ServiceAndProduct) => {
+const addProduct = async (product: ServiceAndProduct, businessId: number) => {
   try {
     return await prisma.serviceAndProduct.create({
-      data: product,
+      data: {
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image ?? null,
+        business: {
+          connect: { id: businessId }, 
+        },
+      },
     });
   } catch (error) {
     throw error;
   }
-}
+};
+
+
 const updateproduct = async (id: number, product: ServiceAndProduct) => {
   try {
     return await prisma.serviceAndProduct.update({
@@ -45,7 +55,7 @@ const getProductsByBusinessId = async (businessId: number) => {
   }
 }
 const productsAndServices = {
-  addproduct,
+  addProduct,
   updateproduct,
   removeproduct,
   getProductsByBusinessId,

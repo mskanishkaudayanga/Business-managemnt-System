@@ -44,9 +44,9 @@ model Business {
   timeZone     TimesEnum
   category     Category
   website      String
-  profileViews Int           @default(0)
-  profileImage Bytes         
-  ownerId      Int           @unique 
+  profileViews Int?           @default(0)
+  profileImage Bytes?        
+  ownerId      Int        @unique 
   owner        User          @relation(fields: [ownerId], references: [id]) 
   services     ServiceAndProduct[]  
   ratings      Rating[]      
@@ -58,7 +58,7 @@ model ServiceAndProduct {
   name        String
   description String
   price       Float
-  image       Bytes    
+  image       Bytes?   
   businessId  Int      
   business    Business @relation(fields: [businessId], references: [id])
   bookings    Booking[] 

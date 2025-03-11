@@ -5,7 +5,7 @@ import authMiddleware from "../middleware/AuthorizationUser";
 const productRoutes = express.Router();
 
 productRoutes.put("/updateProduct",productController.updateProduct );
-productRoutes.post("/AddProducts", productController.productAdd);
-// productRoutes.get("/getAllProductByUser",authMiddleware, productController.getProductsByuserId);
+productRoutes.post("/AddProducts", authMiddleware, productController.productAdd);
+productRoutes.get("/getAllProductByUser",authMiddleware, productController.getProductsByuserId);
 
 export default productRoutes;
