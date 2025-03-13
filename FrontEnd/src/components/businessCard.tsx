@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { businessCardData } from "../types/types";
 import { Card } from "flowbite-react";
 
 const BusinessCard = (props: businessCardData) => {
+  const navigate = useNavigate();
   return (
     <Card
+    onClick={() => navigate(`//BusinessProfile/${props.id}`)}
       className="max-w-sm w-[300px] border rounded-3 rounded-lg"
       imgAlt="Business Image"
       imgSrc="../public/OIP (1).jpeg"

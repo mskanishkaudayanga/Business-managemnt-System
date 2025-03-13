@@ -3,6 +3,7 @@ import InputField from "./InputFeild";
 import SelectField from "./SelectFeild";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import businesSevices from "../services/businessServices";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -36,9 +37,9 @@ const EditProfile = () => {
     "Other",
   ];
   const timeZones = [
-    "Full Time (8 AM - 5 PM)",
-    "Part Time (2 PM - 10 PM)",
-    "24 Hours"
+    "FullTime",
+    "PartTime",
+    "TwentyFourHours"
   ];
   const [formData, setFormData] = useState({
     name: "",
@@ -108,9 +109,8 @@ const EditProfile = () => {
       location: validateField("location", formData.location),
       website: validateField("website", formData.website),
       category: validateField("category", formData.category),
-      description: validateField("description", formData.description),
+     description: validateField("description", formData.description),
     };
-    console.log("Validation errors:", newErrors);
     if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
@@ -127,12 +127,13 @@ const EditProfile = () => {
       };
 
       console.log("rehister ", registerData);
-      // const register = await authServices.register(registerData);
-      // console.log("register ", register);
-      // if (register.error) {
-      //   toast.error(register.error);
-      //   return;
-      // }
+      const register = await businesSevices.addBusiness(registerData);
+      console.log("register ", register);
+      if (register.error) {
+        console.log(register.error);
+        toast.error(register.error);
+        return;
+      }
       toast.success("Registration successful. Redirecting to login page...");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
@@ -184,6 +185,15 @@ const EditProfile = () => {
         />
       </div>
       <div className="flex flex-col gap-4">
+      <InputField
+          label="description"
+          type=" description"
+          name="description"
+          value={formData.description}
+          placeholder="Enter your Discription"
+          onChange={handleChange}
+          validate={validateField}
+        />
         <SelectField
           label="Category"
           name="category"

@@ -1,11 +1,11 @@
 import express from "express";
 import businessController from "../controllers/busines.controller";
+import authMiddleware from "../middleware/AuthorizationUser";
 
 const BusinesRoutes = express.Router();
-
-BusinesRoutes.put("/UpdateBusiness/:id", businessController.updateBusiness);
-BusinesRoutes.post("/AddBusiness", businessController.addBusiness);
-BusinesRoutes.get("/GetAllBusiness", businessController.getAllBusiness);
+BusinesRoutes.post("/AddBusiness", authMiddleware, businessController.addBusiness);
+BusinesRoutes.get("/GetAllBusiness", businessController.getBusinessController);
 BusinesRoutes.get("/GetBusiness", businessController.getBusinessController);
+BusinesRoutes.get("/GetBusinesIDByBusinessID/:id",businessController.getBusinesByBusinessId);
 
 export default BusinesRoutes;

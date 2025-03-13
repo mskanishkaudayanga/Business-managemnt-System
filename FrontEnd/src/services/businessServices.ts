@@ -1,0 +1,25 @@
+import axiosInstance from "./Auth";
+
+const businesSevices ={
+  getBusinessDetails: async (id: number) => {
+    try {
+      const response = await axiosInstance.get(`/GetBusinesIDByUserId/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching business details:", error);
+      throw error;
+    }
+  },
+  addBusiness: async (businessData: any) => {
+    try{
+      const response =await axiosInstance.post(`AddBusiness`,businessData);
+      
+      return response.data;
+    }
+    catch(error){
+      throw error;
+    }
+  },
+
+}
+export default businesSevices;

@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { FlickeringGrid } from "../components/magicui/flickering-grid";
 import BusinessCard from "../components/businessCard";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -49,7 +48,6 @@ const Home = () => {
     { label: "24 Hours", value: "24h" },
   ];
 
-  // State for filters
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -210,7 +208,13 @@ const Home = () => {
           </div>
         </div>
       </div>
-    <BusinessList />
+
+      {/* Passing props to BusinessList to display filtered businesses */}
+      <BusinessList
+        location={selectedLocation}
+        category={selectedCategory}
+        timeZone={selectedTime}
+      />
     </>
   );
 };

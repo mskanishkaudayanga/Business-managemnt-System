@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./InputFeild";
-import { toast } from "react-toastify";
-import authServices from "../services/userServices";
+import { useAuth } from "../context/AthContext";
 
 const LoginForm = () => {
+  const {login} = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -45,16 +45,7 @@ const LoginForm = () => {
     if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
-    try{
-    const login = await authServices.login(formData);
-    console.log("login ", login);
-    toast.success("Login successful! Redirecting...");
-    sessionStorage.setItem("token", login.token);
-    setTimeout(() => navigate("/"));
-    }
-    catch(error){
-      toast.error(error as string);
-    }
+  await login(formData);
   };
 
   return (

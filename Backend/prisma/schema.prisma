@@ -26,30 +26,31 @@ enum TimesEnum {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
+  id   Int    @id @default(autoincrement()) @map("users_id")
   name      String
   email     String      @unique
   role      UserType
   password  String
-  business  Business?   @relation 
+ businesses Business[] 
   businessId Int?       
 }
 
 model Business {
-  id           Int           @id @default(autoincrement())
-  description  String
-  phone        String
-  address      String
-  location     String
-  timeZone     TimesEnum
-  category     Category
-  website      String
-  profileViews Int?           @default(0)
-  profileImage Bytes?        
-  ownerId      Int        @unique 
-  owner        User          @relation(fields: [ownerId], references: [id]) 
-  services     ServiceAndProduct[]  
-  ratings      Rating[]      
+  id            Int           @id @default(autoincrement())
+  description   String
+  name          String
+  phone         String
+  address       String
+  location      String
+  timeZone      TimesEnum
+  category      Category
+  website       String
+  profileViews  Int?          @default(0)
+  profileImage  Bytes?        
+  ownerId       Int           @map("owner_id") // Foreign key reference
+  owner         User          @relation(fields: [ownerId], references: [id], onDelete: Cascade) 
+  services      ServiceAndProduct[]  
+  ratings       Rating[]      
   businessImages BusinessImage[]    
 }
 

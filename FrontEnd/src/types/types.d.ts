@@ -9,6 +9,7 @@ export interface RegisterData{
   role: string;
 }
 export interface businessCardData{
+  id:number;
   name:string;
   location:string;
   category:string;
@@ -22,4 +23,32 @@ export interface ServiceCardProps {
   description: string;
   price: number;
   image: string; // URL or base64 string
+}
+export type BusinessData = {
+  id: number;
+  name: string;
+  address: string;
+  category: string;
+  description: string;
+  location: string;
+  ownerId: number;
+  phone: string;
+  profileImage: string | null;
+  profileViews: number;
+  timeZone: string;
+  website: string;
+};
+export interface Business {
+  id: number;
+  name: string;
+  location: string;
+  category: string;
+  openTime: string;
+  closeTime: string;
+  image: string;
+}
+export interface BusinessListProps {
+  location: string | null;
+  category: string | null;
+  timeZone: string | null;
 }
