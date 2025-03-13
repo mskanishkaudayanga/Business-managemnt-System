@@ -56,8 +56,7 @@ const BusinessList: React.FC <BusinessListProps>= ({location, category,timeZone}
             name={business.name}
             location={business.location}
             category={business.category}
-            openTime={business.openTime}
-            closeTime={business.closeTime}
+            timeZone={business.timeZone}
             image={business.image}
             id={business.id}
           />
@@ -65,7 +64,7 @@ const BusinessList: React.FC <BusinessListProps>= ({location, category,timeZone}
       </div>
 
       {/* Pagination controls */}
-      <div>
+      <div className="mt-5 mb-5">
         <Pagination>
           <PaginationContent>
             <PaginationItem>

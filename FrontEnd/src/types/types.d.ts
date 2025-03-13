@@ -13,8 +13,7 @@ export interface businessCardData{
   name:string;
   location:string;
   category:string;
-  openTime:string;
-  closeTime:string;
+  timeZone:string;
   image:string; 
 
 }
@@ -43,8 +42,7 @@ export interface Business {
   name: string;
   location: string;
   category: string;
-  openTime: string;
-  closeTime: string;
+  timeZone: string;
   image: string;
 }
 export interface BusinessListProps {

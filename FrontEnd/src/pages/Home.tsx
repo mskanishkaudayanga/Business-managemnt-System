@@ -43,9 +43,9 @@ const Home = () => {
     "Other",
   ];
   const timeZones = [
-    { label: "Full Time (8 AM - 5 PM)", value: "8-5" },
-    { label: "Part Time (2 PM - 10 PM)", value: "2-10" },
-    { label: "24 Hours", value: "24h" },
+    "FullTime",
+    "PartTime",
+    "TwentyFourHours"
   ];
 
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
@@ -166,8 +166,8 @@ const Home = () => {
             >
               <option value="">Select Time Period</option>
               {timeZones.map((time, index) => (
-                <option key={index} value={time.value}>
-                  {time.label}
+                <option key={index} value={time}>
+                  {time}
                 </option>
               ))}
             </select>
@@ -199,7 +199,7 @@ const Home = () => {
             )}
             {selectedTime && (
               <div className="bg-white text-green-700 px-3 py-1 rounded-full flex items-center">
-                {timeZones.find((t) => t.value === selectedTime)?.label}
+                {selectedTime}
                 <button onClick={() => removeFilter("time")} className="ml-2">
                   <FaTimes />
                 </button>

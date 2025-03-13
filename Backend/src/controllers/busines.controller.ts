@@ -70,7 +70,6 @@ const getBusinesByBusinessId = async (req :Request, res :Response) => {
       return;
     }
     const businesId =parseInt(req.params.id);
-
     const business = await businessServices.getBusinesByBusinessId(businesId);
     res.status(200).json(business);
 
@@ -79,6 +78,18 @@ const getBusinesByBusinessId = async (req :Request, res :Response) => {
   }
   }
 
+  const countProfilevies=(req:Request, res:Response)=>{
+    try {
+      if (!req.params || !req.params.id) {
+        res.status(400).json({ message: "Invalid business ID" });
+        return;
+      }
+      const businesId =parseInt(req.params.id);
+      
+    } catch (error:any ) {
+      res.status(500).send(error.message)
+    }
+  }
 const businessController = {
   addBusiness,
   getAllBusiness,

@@ -12,7 +12,7 @@ export default function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/BusinessProfile/:id" element={<BusinessProfile />} />
+        <Route path="/businessProfile/:id" element={<BusinessProfile />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
     </AuthProvider>

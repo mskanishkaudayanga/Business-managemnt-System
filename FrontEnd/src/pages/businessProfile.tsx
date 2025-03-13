@@ -15,18 +15,22 @@ import businesSevices from "../services/businessServices";
 import { BusinessData } from "../types/types";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AthContext";
+import userServices from "../services/userServices";
+
 
 const BusinessProfile = () => {
   const { id } = useParams<{ id: string }>();
-  const {isAuthorized} = useAuth();
+
+  const { isAuthorized } = useAuth();
+const [userId, setUserId] = useState<number | null>(null);
   const [businessData, setBusinessData] = useState<BusinessData | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await businesSevices.getBusinessDetails(Number(id));
-        console.log("Fetched business data:", data); 
+        const userIDfletch = await userServices.getAuthorizeUserId();
+        setUserId(userIDfletch.userId);
         setBusinessData(data);
-        console.log("Fetched business data:", businessData); 
       } catch (error) {
         console.error("Error fetching business details:", error);
       }
@@ -34,6 +38,12 @@ const BusinessProfile = () => {
 
     fetchData();
   }, []);
+  const checkAuthorization = () => {
+    if(isAuthorized ===true && businessData?.ownerId===userId){
+      return true;
+    }
+    else false;
+  }
   return (
     <>
       <div className="w-[90%] mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
@@ -46,7 +56,9 @@ const BusinessProfile = () => {
         </div>
         <div className="px-10 pt-14 pb-6 flex flex-col md:flex-row justify-between">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-800">{businessData?.name }</h1>
+            <h1 className="text-3xl font-bold text-gray-800">
+              {businessData?.name}
+            </h1>
             <div className="flex items-center gap-1 mt-2">
               <Star className="text-yellow-500 fill-yellow-500 w-5 h-5" />
               <p className="text-gray-700">1.0 Rating</p>
@@ -58,24 +70,22 @@ const BusinessProfile = () => {
               Location:{businessData?.location}
             </p>
 
-            <p className="text-gray-600 mt-2">
-               {businessData?.description}
-            </p>
-            {isAuthorized && 
-            <Drawer>
-              <div className="mt-4 bg-green-500 text-white py-2 px-4 rounded-lg w-[100px] text-center cursor-pointer">
-                <DrawerTrigger>Open</DrawerTrigger>
-              </div>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>Edit Profile</DrawerTitle>
-                  <DrawerDescription>
-                    <EditProfile />
-                  </DrawerDescription>
-                </DrawerHeader>
-              </DrawerContent>
-            </Drawer>
-  }
+            <p className="text-gray-600 mt-2">{businessData?.description}</p>
+            {checkAuthorization() && (
+              <Drawer>
+                <div className="mt-4 bg-green-500 text-white py-2 px-4 rounded-lg w-[100px] text-center cursor-pointer">
+                  <DrawerTrigger>Open</DrawerTrigger>
+                </div>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerTitle>Edit Profile</DrawerTitle>
+                    <DrawerDescription>
+                      <EditProfile />
+                    </DrawerDescription>
+                  </DrawerHeader>
+                </DrawerContent>
+              </Drawer>
+            )}
           </div>
           <div className="mt-6 md:mt-0 md:w-1/3 flex flex-col gap-4">
             <div>
@@ -100,7 +110,7 @@ const BusinessProfile = () => {
                 href={businessData?.website}
                 className="text-blue-600 hover:underline"
               >
-              {businessData?.website}
+                {businessData?.website}
               </a>
             </div>
             <div>

@@ -150,6 +150,25 @@ const getFilteredBusiness = async (location?: string, category?: Category, timeZ
     throw error;
   }
 };
+const countProfileViews =async (businesId:number)=>{
+  try{
+
+    return await prisma.business.update(
+      {
+        where: {
+          id:businesId
+        },
+        data: {
+          profileViews: { increment: 1 },
+        },
+      }
+
+    )
+  }
+  catch(error){
+    throw error
+  }
+}
 
 
 const businessServices = {
@@ -162,6 +181,7 @@ const businessServices = {
   getBusinesIDByUserId,
   getFilteredBusiness,
   IsbusinessExist,
-  getBusinesByBusinessId
+  getBusinesByBusinessId,
+  countProfileViews
 }
 export default businessServices;

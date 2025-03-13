@@ -3,7 +3,7 @@ import axiosInstance from "./Auth";
 const businesSevices ={
   getBusinessDetails: async (id: number) => {
     try {
-      const response = await axiosInstance.get(`/GetBusinesIDByUserId/${id}`);
+      const response = await axiosInstance.get(`/GetBusinesIDByBusinessID/${id}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching business details:", error);
