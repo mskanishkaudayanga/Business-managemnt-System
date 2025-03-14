@@ -15,8 +15,10 @@ const BusinessList: React.FC<BusinessListProps> = ({
   location,
   category,
   timeZone,
+  searchQuery,
 }) => {
   const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [filteredBusinesses, setFilteredBusinesses] = useState<Business[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 8;
@@ -33,7 +35,6 @@ const BusinessList: React.FC<BusinessListProps> = ({
         });
         console.log("response", response.data);
         setBusinesses(response.data);
-        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
       } catch (error) {
         console.error("Error fetching businesses:", error);
       }
@@ -42,7 +43,18 @@ const BusinessList: React.FC<BusinessListProps> = ({
     fetchBusinesses();
   }, [location, category, timeZone]);
 
-  const businessesToDisplay = businesses.slice(
+  // Filter businesses based on search query
+  useEffect(() => {
+    const filtered = businesses.filter((business) =>
+      business.name.toLowerCase().includes((searchQuery ?? "").toLowerCase())
+    );
+    setFilteredBusinesses(filtered);
+    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+    setCurrentPage(1); // Reset to first page when filtering
+  }, [searchQuery, businesses]);
+
+  // Get businesses for the current page
+  const businessesToDisplay = filteredBusinesses.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -57,13 +69,12 @@ const BusinessList: React.FC<BusinessListProps> = ({
 
   return (
     <div className="mt-2 text-center w-full flex flex-col justify-center items-center">
-        <h1 className="text-2xl font-semibold text-green-500 mt-3 mb-3">
-          Services Or Products
-        </h1>
+      <h1 className="text-2xl font-semibold text-green-500 mt-3 mb-3">
+        Services Or Products
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {businessesToDisplay.length > 0 ? (
           businessesToDisplay.map((business) => (
-            console.log("business", business),
             <BusinessCard
               key={business.id}
               name={business.name}
@@ -84,7 +95,6 @@ const BusinessList: React.FC<BusinessListProps> = ({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              {/* Previous page button */}
               <PaginationPrevious
                 href="#"
                 onClick={handlePrevPage}
@@ -93,7 +103,6 @@ const BusinessList: React.FC<BusinessListProps> = ({
                 }
               />
             </PaginationItem>
-            {/* Page number buttons */}
             {Array.from({ length: totalPages }, (_, index) => (
               <PaginationItem key={index}>
                 <PaginationLink
@@ -106,7 +115,6 @@ const BusinessList: React.FC<BusinessListProps> = ({
               </PaginationItem>
             ))}
             <PaginationItem>
-              {/* Next page button */}
               <PaginationNext
                 href="#"
                 onClick={handleNextPage}

@@ -51,4 +51,5 @@ export interface BusinessListProps {
   location: string | null;
   category: string | null;
   timeZone: string | null;
+  searchQuery: string | null;
 }

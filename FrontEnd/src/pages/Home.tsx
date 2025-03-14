@@ -35,7 +35,7 @@ const Home = () => {
     "Vavuniya",
   ];
   const categories = [
-    "IT",
+    "It",
     "Health",
     "Food",
     "Education",
@@ -51,8 +51,11 @@ const Home = () => {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Fetch data from backend based on filters (Simulating API Call)
+  const handleSearch = () => {
+    console.log("Searching for:", searchQuery);
+  };
   const fetchFilteredData = () => {
     console.log("Fetching data for:", {
       selectedLocation,
@@ -117,11 +120,12 @@ const Home = () => {
             {/* Search Bar */}
             <div className="flex w-full justify-center mt-4">
               <input
+               onChange={(e) => setSearchQuery(e.target.value)}
                 type="text"
                 placeholder="Search for services"
                 className="w-3/4 md:w-4/6 p-2 rounded-l-lg bg-white text-gray-800 focus:outline-none"
               />
-              <button className="p-2 bg-white text-green-700 border-2 border-green-700 rounded-r-lg hover:bg-green-100">
+              <button   onClick={handleSearch} className="p-2 bg-white text-green-700 border-2 border-green-700 rounded-r-lg hover:bg-green-100">
                 Search
               </button>
             </div>
@@ -213,6 +217,7 @@ const Home = () => {
         location={selectedLocation}
         category={selectedCategory}
         timeZone={selectedTime}
+        searchQuery={searchQuery}
       />
     </>
   );
