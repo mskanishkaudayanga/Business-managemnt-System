@@ -1,10 +1,12 @@
 import { Category, TimesEnum } from "@prisma/client";
 import businessServices from "../services/business.service";
 import { Request, Response } from "express";
+import { Session } from "express-session";
 
 const addBusiness = async (req: Request, res: Response) => {
   try {
     const business = req.body;
+    console.log("business",business);
     if (!req.user || !req.user.id) {
       res.status(400).json({ message: "Invalid user ID" });
       return;
@@ -48,16 +50,12 @@ const getBusinessController = async (req: Request, res: Response) => {
   const location: string | undefined = req.query.location as string;
   const category: Category | undefined = req.query.category as Category;
   const timeZone: TimesEnum | undefined = req.query.timeZone as TimesEnum;
-console.log("location",location);
-console.log("category",category);
-console.log("timeZone",timeZone);
   try {
     const businesses = await businessServices.getFilteredBusiness(
       location,
       category,
       timeZone
     );
-
     res.status(200).json(businesses);
   } catch (error) {
     res.status(500).json({ error: "Error fetching businesses" });
@@ -78,22 +76,29 @@ const getBusinesByBusinessId = async (req :Request, res :Response) => {
   }
   }
 
-  const countProfilevies=(req:Request, res:Response)=>{
-    try {
-      if (!req.params || !req.params.id) {
-        res.status(400).json({ message: "Invalid business ID" });
-        return;
-      }
-      const businesId =parseInt(req.params.id);
-      
-    } catch (error:any ) {
-      res.status(500).send(error.message)
-    }
+  interface CustomSession extends Session {
+    [key: string]: any;
   }
+  
+  const viewBusinessProfile = async (req: Request & { session: CustomSession }, res: Response) => {
+    const { businessId } = req.params;
+
+  
+    try {
+      const updatedBusiness = await businessServices.countProfileViews(Number(businessId));
+    res.status(200).json(updatedBusiness);
+    return
+    } catch (error) {
+      console.error("Error updating profile views:", error);
+      res.status(500).json({ message: "Error updating profile views." });
+      return
+    }
+  };
 const businessController = {
   addBusiness,
   getAllBusiness,
   getBusinessController,
   getBusinesByBusinessId,
+  viewBusinessProfile,
 };
 export default businessController;

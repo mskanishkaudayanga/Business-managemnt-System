@@ -20,6 +20,18 @@ const businesSevices ={
       throw error;
     }
   },
+  countProfileVies : async (id:number)=>{
+    try{
+      console.log("id",id);
+      const response = await axiosInstance.get(`businessProfile/${id}`,{
+        withCredentials: true,
+      });
+      return response.data;
+    }
+    catch(error){
+      throw error;
+    }
+  }
 
 }
 export default businesSevices;

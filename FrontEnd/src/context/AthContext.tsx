@@ -42,11 +42,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await authServices.login(formData);
       console.log("Login Response:", response);
-
       toast.success("Login successful! Redirecting...");
       sessionStorage.setItem("token", response.token);
       setAuthorized(true);
-
       setTimeout(() => navigate("/"), 1000);
     } catch (error) {
       toast.error("Login failed. Please check your credentials.");

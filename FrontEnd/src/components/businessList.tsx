@@ -1,47 +1,55 @@
 import { useState, useEffect } from "react";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../components/ui/pagination";
 import BusinessCard from "./businessCard";
 import axiosInstance from "../services/Auth";
 import { Business, BusinessListProps } from "../types/types";
 
-
-
-const BusinessList: React.FC <BusinessListProps>= ({location, category,timeZone}) => {
+const BusinessList: React.FC<BusinessListProps> = ({
+  location,
+  category,
+  timeZone,
+}) => {
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 8; 
+  const itemsPerPage = 8;
 
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
-        const response = await axiosInstance.get(`/GetAllBusiness`,{
+        const response = await axiosInstance.get(`/GetAllBusiness`, {
           params: {
-            location: location,  
+            location: location,
             category: category,
             timeZone: timeZone,
           },
-        })
-        setBusinesses(response.data); 
-        setTotalPages(Math.ceil(response.data.length / itemsPerPage)); 
+        });
+        console.log("response", response.data);
+        setBusinesses(response.data);
+        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
       } catch (error) {
         console.error("Error fetching businesses:", error);
       }
     };
 
-    fetchBusinesses(); 
-  }, [location, category, timeZone]);  
+    fetchBusinesses();
+  }, [location, category, timeZone]);
 
   const businessesToDisplay = businesses.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -49,18 +57,26 @@ const BusinessList: React.FC <BusinessListProps>= ({location, category,timeZone}
 
   return (
     <div className="mt-2 text-center w-full flex flex-col justify-center items-center">
+        <h1 className="text-2xl font-semibold text-green-500 mt-3 mb-3">
+          Services Or Products
+        </h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {businessesToDisplay.map((business) => (
-          <BusinessCard
-            key={business.id}
-            name={business.name}
-            location={business.location}
-            category={business.category}
-            timeZone={business.timeZone}
-            image={business.image}
-            id={business.id}
-          />
-        ))}
+        {businessesToDisplay.length > 0 ? (
+          businessesToDisplay.map((business) => (
+            console.log("business", business),
+            <BusinessCard
+              key={business.id}
+              name={business.name}
+              location={business.location}
+              category={business.category}
+              timeZone={business.timeZone}
+              profileImage={business.profileImage}
+              id={business.id}
+            />
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No businesses available</p>
+        )}
       </div>
 
       {/* Pagination controls */}
@@ -72,7 +88,9 @@ const BusinessList: React.FC <BusinessListProps>= ({location, category,timeZone}
               <PaginationPrevious
                 href="#"
                 onClick={handlePrevPage}
-                className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
+                className={
+                  currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                }
               />
             </PaginationItem>
             {/* Page number buttons */}
@@ -92,7 +110,11 @@ const BusinessList: React.FC <BusinessListProps>= ({location, category,timeZone}
               <PaginationNext
                 href="#"
                 onClick={handleNextPage}
-                className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}
+                className={
+                  currentPage === totalPages
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }
               />
             </PaginationItem>
           </PaginationContent>

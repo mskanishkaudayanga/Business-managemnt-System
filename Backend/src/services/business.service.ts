@@ -15,6 +15,7 @@ const updateBusiness = async (id: number, business: Partial<Business>): Promise<
         timeZone: business.timeZone as TimesEnum | undefined,
         category: business.category as Category | undefined,
         website: business.website,
+        profileImage: business.profileImage,
       },
     });
   } catch (error) {
@@ -40,6 +41,7 @@ const Addbusiness = async (business: Business,userId: number) => {
         category: business.category as Category, 
         website: business.website,
         ownerId: userId, 
+        profileImage: business.profileImage,
       },
     });
   } catch (error) {

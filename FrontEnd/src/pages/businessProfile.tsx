@@ -17,19 +17,16 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AthContext";
 import userServices from "../services/userServices";
 
-
 const BusinessProfile = () => {
   const { id } = useParams<{ id: string }>();
 
   const { isAuthorized } = useAuth();
-const [userId, setUserId] = useState<number | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
   const [businessData, setBusinessData] = useState<BusinessData | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await businesSevices.getBusinessDetails(Number(id));
-        const userIDfletch = await userServices.getAuthorizeUserId();
-        setUserId(userIDfletch.userId);
         setBusinessData(data);
       } catch (error) {
         console.error("Error fetching business details:", error);
@@ -38,21 +35,49 @@ const [userId, setUserId] = useState<number | null>(null);
 
     fetchData();
   }, []);
-  const checkAuthorization = () => {
-    if(isAuthorized ===true && businessData?.ownerId===userId){
-      return true;
+  useEffect(() => {
+    const getUserId = async () => {
+      try {
+        const userIDfletch = await userServices.getAuthorizeUserId();
+        // await businesSevices.countProfileVies(Number(id));
+        setUserId(userIDfletch.userId);
+      } catch (error) {
+        console.error("Error fetching business details:", error);
+      }
+    };
+    getUserId();
+  }, []);
+  useEffect(() => {
+  const   getProfileViews=async ()=>{
+      try {
+        await businesSevices.countProfileVies(Number(id));
+      } catch (error) {
+        console.error("Error fetching business details:", error);
+      }
     }
-    else false;
-  }
+    getProfileViews()
+  }, [id]);
+
+  const checkAuthorization = () => {
+    if (isAuthorized === true && businessData?.ownerId === userId) {
+      return true;
+    } else false;
+  };
   return (
     <>
       <div className="w-[90%] mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="relative h-[250px] w-full">
-          <img
-            src={photo}
-            alt="Business Cover"
-            className="w-full h-full object-cover"
-          />
+        <div className="relative h-[250px] w-full flex items-center justify-center bg-gray-200">
+          {businessData?.profileImage ? (
+            <img
+              src={businessData.profileImage}
+              alt="Business Cover"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-green-500 text-white text-6xl font-bold">
+              {businessData?.name?.charAt(0)}
+            </div>
+          )}
         </div>
         <div className="px-10 pt-14 pb-6 flex flex-col md:flex-row justify-between">
           <div className="flex-1">
@@ -117,7 +142,7 @@ const [userId, setUserId] = useState<number | null>(null);
               <h2 className="text-lg font-semibold text-gray-800">
                 Profile Views
               </h2>
-              <p className="text-gray-600">15,230 views</p>
+              <p className="text-gray-600">{businessData?.profileViews} views</p>
             </div>
           </div>
         </div>

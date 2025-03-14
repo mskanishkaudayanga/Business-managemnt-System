@@ -14,7 +14,7 @@ export interface businessCardData{
   location:string;
   category:string;
   timeZone:string;
-  image:string; 
+  profileImage:string; 
 
 }
 export interface ServiceCardProps {
@@ -36,8 +36,10 @@ export type BusinessData = {
   profileViews: number;
   timeZone: string;
   website: string;
+  profileImage:string
 };
 export interface Business {
+  profileImage: string;
   id: number;
   name: string;
   location: string;

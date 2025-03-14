@@ -46,7 +46,7 @@ model Business {
   category      Category
   website       String
   profileViews  Int?          @default(0)
-  profileImage  Bytes?        
+  profileImage  String?        
   ownerId       Int           @map("owner_id") // Foreign key reference
   owner         User          @relation(fields: [ownerId], references: [id], onDelete: Cascade) 
   services      ServiceAndProduct[]  

@@ -103,9 +103,7 @@ const Home = () => {
           maxOpacity={0.5}
           flickerChance={0.1}
         />
-        <div className="z-10 relative flex flex-col items-center justify-center">
-          <h1>name</h1>
-        </div>
+    
 
         {/* Main Container */}
         <div className="w-[80%] h-auto bg-green-700 shadow-lg rounded-lg flex flex-col items-center justify-center p-6 z-10">
@@ -210,6 +208,7 @@ const Home = () => {
       </div>
 
       {/* Passing props to BusinessList to display filtered businesses */}
+   
       <BusinessList
         location={selectedLocation}
         category={selectedCategory}

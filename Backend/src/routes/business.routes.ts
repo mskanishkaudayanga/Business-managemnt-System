@@ -7,5 +7,6 @@ BusinesRoutes.post("/AddBusiness", authMiddleware, businessController.addBusines
 BusinesRoutes.get("/GetAllBusiness", businessController.getBusinessController);
 BusinesRoutes.get("/GetBusiness", businessController.getBusinessController);
 BusinesRoutes.get("/GetBusinesIDByBusinessID/:id",businessController.getBusinesByBusinessId);
+BusinesRoutes.get("/businessProfile/:businessId", businessController.viewBusinessProfile);
 
 export default BusinesRoutes;
