@@ -2,23 +2,60 @@ import { Business, Category, Prisma, PrismaClient, TimesEnum } from "@prisma/cli
 const prisma = new PrismaClient();
 
 
-const updateBusiness = async (id:number, business: Business): Promise<Business> => {
+const updateBusiness = async (id: number, business: Partial<Business>): Promise<Business> => {
   try {
     return await prisma.business.update({
-      where: {
-        id: id,
+      where: { id },
+      data: {
+        description: business.description,
+        name: business.name,
+        phone: business.phone,
+        address: business.address,
+        location: business.location,
+        timeZone: business.timeZone as TimesEnum | undefined,
+        category: business.category as Category | undefined,
+        website: business.website,
+        profileImage: business.profileImage,
       },
-      data: business,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const Addbusiness = async (business: Business,userId: number) => {
+  try {
+    const userExists = await prisma.user.findUnique({ where: { id: userId } });
+    if (!userExists) {
+      console.log(`User with ID ${userId} not found.`);
+      throw new Error(`User with ID ${userId} does not exist.`);
+    }
+    return await prisma.business.create({
+      data: {
+        description: business.description,
+        name: business.name,
+        phone: business.phone,
+        address: business.address,
+        location: business.location,
+        timeZone: business.timeZone as TimesEnum,
+        category: business.category as Category, 
+        website: business.website,
+        ownerId: userId, 
+        profileImage: business.profileImage,
+      },
     });
   } catch (error) {
     throw error;
   }
 }
-const Addbusiness = async (business: Business): Promise<Business> => {
+const IsbusinessExist = async (userId:number)=> {
   try {
-    return await prisma.business.create({
-      data: business,
+    const existingBusiness = await prisma.business.findFirst({
+      where: { ownerId: userId },
     });
+
+    console.log("existingBusiness exit", existingBusiness);
+    return existingBusiness?.id;
   } catch (error) {
     throw error;
   }
@@ -79,6 +116,18 @@ const getBusinesIDByUserId = async (userId: number): Promise<number> => {
     throw error;
   }
 }
+const getBusinesByBusinessId = async (businesId: number): Promise<Business | null> => {
+  try {
+    const business = await prisma.business.findFirst({
+      where: {
+        id: businesId,
+      },
+    });
+    return business;
+  } catch (error) {
+    throw error;
+  }
+}
 
 const getFilteredBusiness = async (location?: string, category?: Category, timeZone?: TimesEnum): Promise<Business[]> => {
   try {
@@ -103,6 +152,25 @@ const getFilteredBusiness = async (location?: string, category?: Category, timeZ
     throw error;
   }
 };
+const countProfileViews =async (businesId:number)=>{
+  try{
+
+    return await prisma.business.update(
+      {
+        where: {
+          id:businesId
+        },
+        data: {
+          profileViews: { increment: 1 },
+        },
+      }
+
+    )
+  }
+  catch(error){
+    throw error
+  }
+}
 
 
 const businessServices = {
@@ -113,6 +181,9 @@ const businessServices = {
   getbusinessByTimeZone,
   getAllBusiness,
   getBusinesIDByUserId,
-  getFilteredBusiness
+  getFilteredBusiness,
+  IsbusinessExist,
+  getBusinesByBusinessId,
+  countProfileViews
 }
 export default businessServices;

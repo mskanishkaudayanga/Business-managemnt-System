@@ -44,6 +44,7 @@ const genarateToken = async (id: number, role: string) => {
     return error;
   }
 };
+ 
 
 const userServices = {
   registerUser,

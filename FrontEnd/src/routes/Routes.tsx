@@ -1,17 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Adjust the path as necessary
+import { Routes, Route } from "react-router-dom";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import BusinessProfile from "../pages/businessProfile";
+import { AuthProvider } from "../context/AthContext";
+import Layout from "../components/layout"; 
 
 export default function AppRouter() {
   return (
-    <Routes>
-      <Route path="/" element={ <Home/>} />
-      <Route path="/signup" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/Business:id" element={<BusinessProfile/>} />
-      <Route path="*" element={<h1>Not Found</h1>} />
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="signup" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="businessProfile/:id" element={<BusinessProfile />} />
+          <Route path="*" element={<h1>Not Found</h1>} />
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }

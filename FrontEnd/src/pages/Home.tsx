@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { FlickeringGrid } from "../components/magicui/flickering-grid";
 import BusinessCard from "../components/businessCard";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -44,12 +43,11 @@ const Home = () => {
     "Other",
   ];
   const timeZones = [
-    { label: "Full Time (8 AM - 5 PM)", value: "8-5" },
-    { label: "Part Time (2 PM - 10 PM)", value: "2-10" },
-    { label: "24 Hours", value: "24h" },
+    "FullTime",
+    "PartTime",
+    "TwentyFourHours"
   ];
 
-  // State for filters
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -105,9 +103,7 @@ const Home = () => {
           maxOpacity={0.5}
           flickerChance={0.1}
         />
-        <div className="z-10 relative flex flex-col items-center justify-center">
-          <h1>name</h1>
-        </div>
+    
 
         {/* Main Container */}
         <div className="w-[80%] h-auto bg-green-700 shadow-lg rounded-lg flex flex-col items-center justify-center p-6 z-10">
@@ -168,8 +164,8 @@ const Home = () => {
             >
               <option value="">Select Time Period</option>
               {timeZones.map((time, index) => (
-                <option key={index} value={time.value}>
-                  {time.label}
+                <option key={index} value={time}>
+                  {time}
                 </option>
               ))}
             </select>
@@ -201,7 +197,7 @@ const Home = () => {
             )}
             {selectedTime && (
               <div className="bg-white text-green-700 px-3 py-1 rounded-full flex items-center">
-                {timeZones.find((t) => t.value === selectedTime)?.label}
+                {selectedTime}
                 <button onClick={() => removeFilter("time")} className="ml-2">
                   <FaTimes />
                 </button>
@@ -210,7 +206,14 @@ const Home = () => {
           </div>
         </div>
       </div>
-    <BusinessList />
+
+      {/* Passing props to BusinessList to display filtered businesses */}
+   
+      <BusinessList
+        location={selectedLocation}
+        category={selectedCategory}
+        timeZone={selectedTime}
+      />
     </>
   );
 };

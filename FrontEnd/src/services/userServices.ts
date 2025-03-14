@@ -25,6 +25,15 @@ const authServices ={
       throw error;
 
     }
+  },
+  getAuthorizeUserId: async () => {
+    try{
+      const response =await axiosInstance.get("getAuthorizeUserId");
+      return response.data;
+    }
+    catch(error){
+      throw error;
+    }
   }
 }
 
