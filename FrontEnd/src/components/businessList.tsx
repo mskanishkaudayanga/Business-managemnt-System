@@ -43,7 +43,6 @@ const BusinessList: React.FC<BusinessListProps> = ({
     fetchBusinesses();
   }, [location, category, timeZone]);
 
-  // Filter businesses based on search query
   useEffect(() => {
     const filtered = businesses.filter((business) =>
       business.name.toLowerCase().includes((searchQuery ?? "").toLowerCase())
@@ -53,7 +52,7 @@ const BusinessList: React.FC<BusinessListProps> = ({
     setCurrentPage(1); // Reset to first page when filtering
   }, [searchQuery, businesses]);
 
-  // Get businesses for the current page
+
   const businessesToDisplay = filteredBusinesses.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage

@@ -31,7 +31,17 @@ const businesSevices ={
     catch(error){
       throw error;
     }
+  },
+getBusinesIdAuthorized : async ()=>{
+  try{
+    const response = await axiosInstance.get(`GetBusinesIDByAuthorized`);
+    return response.data;
+
   }
+  catch(error){
+    throw error;
+  }
+}
 
 }
 export default businesSevices;

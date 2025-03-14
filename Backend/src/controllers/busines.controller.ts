@@ -94,11 +94,26 @@ const getBusinesByBusinessId = async (req :Request, res :Response) => {
       return
     }
   };
+  const getBusinesIdByAuthorized = async (req: Request, res: Response) => {
+    try {
+      if (!req.user || !req.user.id) {
+        res.status(400).json({ message: "Invalid user ID" });
+        return;
+      }
+      const businessId = await businessServices.getBusinesIDByUserId(req.user.id);
+      res.status(200).json(businessId);
+    }
+    catch (error) {
+      res.status(500).json({ message: "Error fetching business ID" });
+    }
+  }
+
 const businessController = {
   addBusiness,
   getAllBusiness,
   getBusinessController,
   getBusinesByBusinessId,
   viewBusinessProfile,
+  getBusinesIdByAuthorized
 };
 export default businessController;

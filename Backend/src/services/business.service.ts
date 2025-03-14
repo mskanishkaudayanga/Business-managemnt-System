@@ -172,6 +172,22 @@ const countProfileViews =async (businesId:number)=>{
   }
 }
 
+const getBusinessIdByUserId = async (userId: number) => {
+  try {
+    const business = await prisma.business.findFirst({
+      where: {
+        ownerId: userId,
+      },
+    });
+    if (business) {
+      return business.id;
+    }
+    return 0;
+  }
+  catch (error) {
+    throw error;
+  }
+}
 
 const businessServices = {
   updateBusiness,
@@ -184,6 +200,7 @@ const businessServices = {
   getFilteredBusiness,
   IsbusinessExist,
   getBusinesByBusinessId,
-  countProfileViews
+  countProfileViews,
+  getBusinessIdByUserId
 }
 export default businessServices;
